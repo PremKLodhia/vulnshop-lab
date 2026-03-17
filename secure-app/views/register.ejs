@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | VulnShop Lab</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand"><a href="/">🛒 VulnShop Lab</a><span class="vuln-badge" style="background:#16a34a">SECURE</span></div>
+    <div class="nav-links"><a href="/login">Login</a><a href="/register">Register</a></div>
+  </nav>
+  <div class="warning-banner" style="background:#dcfce7;color:#166534;border-bottom:1px solid #86efac;">Remediated secure build for local lab retest and comparison.</div>
+  <main class="container">
+    <div class="auth-box">
+      <h1>Register</h1>
+      <% if (error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+      <form method="POST" action="/register">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" name="username" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" name="password" required>
+        </div>
+        <button type="submit" class="btn-primary">Register</button>
+      </form>
+      <p>Already have an account? <a href="/login">Login</a></p>
+    </div>
+  </main>
+</body>
+</html>

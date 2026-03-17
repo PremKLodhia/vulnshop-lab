@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title><%= title %> | VulnShop Lab</title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+  <nav class="navbar"><div class="nav-brand"><a href="/">🛒 VulnShop Lab</a><span class="vuln-badge" style="background:#16a34a">SECURE</span></div>
+    <div class="nav-links"><a href="/products">Products</a><a href="/fetch">URL Fetch</a><a href="/profile">👤 <%= user.username %></a><a href="/logout" class="btn-logout">Logout</a></div></nav>
+  <div class="warning-banner" style="background:#dcfce7;color:#166534;border-bottom:1px solid #86efac;">Remediated secure build for local lab retest and comparison.</div>
+  <main class="container">
+    <h1>Server-Side URL Fetcher (Protected)</h1>
+    <p>This tool fetches only allowlisted URLs to mitigate SSRF.</p>
+    <div class="card">
+      <form method="POST" action="/fetch">
+        <div class="form-group">
+          <label>URL to fetch</label>
+          <input type="text" name="url" value="<%= url || 'http://example.com' %>" style="width:100%" required>
+        </div>
+        <button type="submit" class="btn-primary">Fetch URL</button>
+      </form>
+      <p class="muted">Only configured safe hosts are allowed in secure mode.</p>
+    </div>
+
+    <% if (error) { %>
+      <div class="alert alert-error"><%= error %></div>
+    <% } %>
+
+    <% if (result) { %>
+      <h2>Response Preview</h2>
+      <% if (typeof statusCode !== 'undefined') { %><p>Status: <strong><%= statusCode %></strong></p><% } %>
+      <% if (headers) { %>
+        <h3>Headers</h3>
+        <pre><%= headers %></pre>
+      <% } %>
+      <pre class="fetch-output"><%= result %></pre>
+    <% } %>
+  </main>
+</body>
+</html>

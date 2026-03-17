@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title><%= title %> | VulnShop Lab</title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+  <nav class="navbar"><div class="nav-brand"><a href="/">🛒 VulnShop Lab</a><span class="vuln-badge">⚠️ VULNERABLE</span></div>
+    <div class="nav-links"><a href="/products">Products</a><a href="/cart">Cart</a><a href="/orders">Orders</a><a href="/support">Support</a><a href="/fetch">URL Fetch</a>
+      <% if (user.role === 'admin') { %><a href="/admin" class="admin-link">Admin</a><% } %>
+      <a href="/profile">👤 <%= user.username %></a><a href="/logout" class="btn-logout">Logout</a></div></nav>
+  <div class="warning-banner">⚠️ INTENTIONALLY VULNERABLE — LOCAL LAB USE ONLY</div>
+
+  <main class="container">
+    <h1><%= isOwn ? 'My Profile' : profileUser.username + "'s Profile" %></h1>
+
+    <div class="profile-card">
+      <div class="profile-avatar">
+        <% if (profileUser.avatar) { %>
+          <img src="<%= profileUser.avatar %>" alt="Avatar" class="avatar-img">
+        <% } else { %>
+          <div class="avatar-placeholder">👤</div>
+        <% } %>
+      </div>
+      <div class="profile-info">
+        <p><strong>ID:</strong> <%= profileUser.id %></p>
+        <p><strong>Username:</strong> <%= profileUser.username %></p>
+        <p><strong>Email:</strong> <%= profileUser.email %></p>
+        <p><strong>Joined:</strong> <%= new Date(profileUser.created_at).toLocaleDateString() %></p>
+        <p><strong>Bio:</strong></p>
+        <!-- VULNERABILITY: Stored XSS - bio rendered unescaped -->
+        <div class="bio-box"><%- profileUser.bio || 'No bio yet.' %></div>
+      </div>
+    </div>
+
+    <% if (isOwn) { %>
+      <section class="card">
+        <h2>Update Bio</h2>
+        <p>Try adding HTML/JS for XSS demo.</p>
+        <form method="POST" action="/profile/update">
+          <textarea name="bio" rows="4" placeholder='Try: <img src=x onerror=alert("XSS")>'><%= profileUser.bio %></textarea>
+          <button type="submit" class="btn-primary">Update Bio</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Upload Avatar</h2>
+        <p>Vulnerable upload: accepts almost any file type.</p>
+        <form method="POST" action="/profile/avatar" enctype="multipart/form-data">
+          <input type="file" name="avatar">
+          <button type="submit" class="btn-primary">Upload</button>
+        </form>
+        <p class="muted">Uploaded files are in <code>/public/uploads/</code></p>
+      </section>
+    <% } %>
+  </main>
+</body>
+</html>

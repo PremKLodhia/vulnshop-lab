@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title><%= title %> | VulnShop Lab</title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+  <nav class="navbar"><div class="nav-brand"><a href="/">🛒 VulnShop Lab</a><span class="vuln-badge">⚠️ VULNERABLE</span></div>
+    <div class="nav-links"><a href="/products">Products</a><a href="/support">Support</a><a href="/profile">👤 <%= user ? user.username : 'Guest' %></a></div></nav>
+  <div class="warning-banner">⚠️ INTENTIONALLY VULNERABLE — LOCAL LAB USE ONLY</div>
+  <main class="container">
+    <h1>All Support Tickets (Insecure)</h1>
+    <table class="table">
+      <thead><tr><th>ID</th><th>User ID</th><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th></tr></thead>
+      <tbody>
+        <% tickets.forEach(t => { %>
+          <tr>
+            <td><%= t.id %></td>
+            <td><%= t.user_id %></td>
+            <td><%= t.name %></td>
+            <td><%= t.email %></td>
+            <td><%= t.subject %></td>
+            <!-- VULNERABILITY: message rendered unescaped -->
+            <td><%- t.message %></td>
+            <td><%= new Date(t.created_at).toLocaleString() %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | VulnShop Lab ⚠️ VULNERABLE</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="/">🛒 VulnShop Lab</a>
+      <span class="vuln-badge">⚠️ VULNERABLE</span>
+    </div>
+    <div class="nav-links">
+      <a href="/products">Products</a>
+      <% if (user) { %>
+        <a href="/cart">Cart</a>
+        <a href="/orders">Orders</a>
+        <a href="/support">Support</a>
+        <a href="/fetch">URL Fetch</a>
+        <% if (user.role === 'admin') { %>
+          <a href="/admin" class="admin-link">Admin</a>
+        <% } %>
+        <a href="/profile">👤 <%= user.username %></a>
+        <a href="/logout" class="btn-logout">Logout</a>
+      <% } else { %>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      <% } %>
+    </div>
+  </nav>
+
+  <div class="warning-banner">
+    ⚠️ INTENTIONALLY VULNERABLE APPLICATION — LOCAL LAB USE ONLY — DO NOT DEPLOY TO INTERNET
+  </div>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Welcome to VulnShop Lab</h1>
+      <p>Your demo e-commerce store for cybersecurity practice.</p>
+      <a href="/products" class="btn-primary">Browse Products</a>
+    </section>
+
+    <section class="featured">
+      <h2>Featured Products</h2>
+      <div class="product-grid">
+        <% products.forEach(p => { %>
+          <div class="product-card">
+            <img src="<%= p.image %>" alt="<%= p.name %>">
+            <h3><%= p.name %></h3>
+            <p class="price">$<%= p.price.toFixed(2) %></p>
+            <a href="/products/<%= p.id %>" class="btn-secondary">View</a>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>VulnShop Lab &copy; 2024 — Educational Cybersecurity Project — <strong>⚠️ Vulnerable Version (Port 3000)</strong></p>
+  </footer>
+</body>
+</html>

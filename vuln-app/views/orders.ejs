@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title><%= title %> | VulnShop Lab</title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+  <nav class="navbar"><div class="nav-brand"><a href="/">🛒 VulnShop Lab</a><span class="vuln-badge">⚠️ VULNERABLE</span></div>
+    <div class="nav-links"><a href="/products">Products</a><a href="/cart">Cart</a><a href="/orders">Orders</a><a href="/profile">👤 <%= user.username %></a><a href="/logout" class="btn-logout">Logout</a></div></nav>
+  <div class="warning-banner">⚠️ INTENTIONALLY VULNERABLE — LOCAL LAB USE ONLY</div>
+  <main class="container">
+    <h1>My Orders</h1>
+    <% if (orders.length === 0) { %>
+      <p>No orders yet.</p>
+    <% } else { %>
+      <div class="order-list">
+        <% orders.forEach(order => { %>
+          <div class="order-card">
+            <h3>Order #<%= order.id %></h3>
+            <p>Status: <strong><%= order.status %></strong></p>
+            <p>Total: $<%= order.total.toFixed(2) %></p>
+            <p>Date: <%= new Date(order.created_at).toLocaleString() %></p>
+            <a href="/orders/<%= order.id %>" class="btn-secondary">View Details</a>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </main>
+</body>
+</html>

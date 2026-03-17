@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | VulnShop Lab</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand"><a href="/">🛒 VulnShop Lab</a><span class="vuln-badge">⚠️ VULNERABLE</span></div>
+    <div class="nav-links">
+      <a href="/products">Products</a>
+      <% if (user) { %><a href="/cart">Cart</a><a href="/orders">Orders</a>
+        <% if (user.role === 'admin') { %><a href="/admin" class="admin-link">Admin</a><% } %>
+        <a href="/profile">👤 <%= user.username %></a><a href="/logout" class="btn-logout">Logout</a>
+      <% } else { %><a href="/login">Login</a><a href="/register">Register</a><% } %>
+    </div>
+  </nav>
+  <div class="warning-banner">⚠️ INTENTIONALLY VULNERABLE — LOCAL LAB USE ONLY</div>
+  <main class="container">
+    <a href="/products" class="back-link">← Back to Products</a>
+    <div class="product-detail">
+      <img src="<%= product.image %>" alt="<%= product.name %>" class="product-detail-img">
+      <div class="product-info">
+        <h1><%= product.name %></h1>
+        <p class="category">Category: <%= product.category %></p>
+        <p class="price">$<%= product.price.toFixed(2) %></p>
+        <p><%= product.description %></p>
+        <p class="stock"><%= product.stock > 0 ? `In Stock (${product.stock} available)` : 'Out of Stock' %></p>
+        <% if (user) { %>
+          <form method="POST" action="/cart/add">
+            <input type="hidden" name="productId" value="<%= product.id %>">
+            <label>Quantity: <input type="number" name="quantity" value="1" min="1" max="10"></label>
+            <button type="submit" class="btn-primary">Add to Cart</button>
+          </form>
+        <% } else { %>
+          <a href="/login" class="btn-secondary">Login to Buy</a>
+        <% } %>
+      </div>
+    </div>
+
+    <section class="reviews">
+      <h2>Customer Reviews</h2>
+      <% reviews.forEach(r => { %>
+        <div class="review-card">
+          <strong><%= r.username %></strong>
+          <span class="rating">⭐ <%= r.rating %>/5</span>
+          <span class="date"><%= new Date(r.created_at).toLocaleDateString() %></span>
+          <!-- VULNERABILITY: Stored XSS - comment rendered unescaped with <%- %>  -->
+          <!-- If a user submitted <script>alert('XSS')</script> as a comment, it executes here -->
+          <p><%- r.comment %></p>
+        </div>
+      <% }) %>
+      <% if (reviews.length === 0) { %>
+        <p>No reviews yet. Be the first!</p>
+      <% } %>
+
+      <% if (user) { %>
+        <h3>Write a Review</h3>
+        <form method="POST" action="/products/<%= product.id %>/review" class="review-form">
+          <div class="form-group">
+            <label>Rating</label>
+            <select name="rating">
+              <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+              <option value="4">⭐⭐⭐⭐ (4)</option>
+              <option value="3">⭐⭐⭐ (3)</option>
+              <option value="2">⭐⭐ (2)</option>
+              <option value="1">⭐ (1)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Comment (try HTML tags!)</label>
+            <!-- VULNERABILITY: XSS hint in placeholder -->
+            <textarea name="comment" placeholder='Try: <script>alert("XSS")</script>' rows="4"></textarea>
+          </div>
+          <button type="submit" class="btn-primary">Submit Review</button>
+        </form>
+      <% } %>
+    </section>
+  </main>
+</body>
+</html>

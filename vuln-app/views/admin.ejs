@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title><%= title %> | VulnShop Lab</title><link rel="stylesheet" href="/css/style.css"></head>
+<body>
+  <nav class="navbar"><div class="nav-brand"><a href="/">🛒 VulnShop Lab</a><span class="vuln-badge">⚠️ VULNERABLE</span></div>
+    <div class="nav-links"><a href="/products">Products</a><a href="/admin" class="admin-link">Admin</a><a href="/profile">👤 <%= user.username %></a><a href="/logout" class="btn-logout">Logout</a></div></nav>
+  <div class="warning-banner">⚠️ INTENTIONALLY VULNERABLE — LOCAL LAB USE ONLY</div>
+  <main class="container">
+    <h1>Admin Dashboard</h1>
+
+    <div class="card">
+      <h2>Admin Search (SQLi Demo)</h2>
+      <p>Try searching with payloads like: <code>' OR 1=1 --</code></p>
+      <form onsubmit="event.preventDefault(); searchUsers();" class="search-form">
+        <input id="adminSearch" type="text" placeholder="Search username or email...">
+        <button type="submit" class="btn-primary">Search</button>
+      </form>
+      <pre id="searchResults">Search results appear here...</pre>
+    </div>
+
+    <h2>Users</h2>
+    <table class="table">
+      <thead><tr><th>ID</th><th>Username</th><th>Email</th><th>Role</th><th>Actions</th></tr></thead>
+      <tbody>
+        <% users.forEach(u => { %>
+          <tr>
+            <td><%= u.id %></td>
+            <td><%= u.username %></td>
+            <td><%= u.email %></td>
+            <td><%= u.role %></td>
+            <td>
+              <form method="POST" action="/admin/users/<%= u.id %>/role" style="display:inline">
+                <select name="role">
+                  <option value="user" <%= u.role === 'user' ? 'selected' : '' %>>user</option>
+                  <option value="admin" <%= u.role === 'admin' ? 'selected' : '' %>>admin</option>
+                </select>
+                <button type="submit" class="btn-secondary">Update Role</button>
+              </form>
+              <% if (u.id !== user.id) { %>
+                <form method="POST" action="/admin/users/<%= u.id %>/delete" style="display:inline">
+                  <button type="submit" class="btn-danger">Delete</button>
+                </form>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <h2>Recent Orders</h2>
+    <table class="table">
+      <thead><tr><th>Order ID</th><th>User</th><th>Total</th><th>Status</th><th>Date</th></tr></thead>
+      <tbody>
+        <% orders.forEach(o => { %>
+          <tr><td><%= o.id %></td><td><%= o.username %></td><td>$<%= o.total.toFixed(2) %></td><td><%= o.status %></td><td><%= new Date(o.created_at).toLocaleString() %></td></tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <h2>Support Tickets</h2>
+    <table class="table">
+      <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th></tr></thead>
+      <tbody>
+        <% tickets.forEach(t => { %>
+          <tr>
+            <td><%= t.id %></td><td><%= t.name %></td><td><%= t.email %></td><td><%= t.subject %></td>
+            <!-- VULNERABILITY: Potential stored XSS display -->
+            <td><%- t.message %></td>
+            <td><%= new Date(t.created_at).toLocaleString() %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </main>
+
+  <script>
+    async function searchUsers() {
+      const q = document.getElementById('adminSearch').value;
+      const res = await fetch(`/admin/users/search?q=${encodeURIComponent(q)}`);
+      const data = await res.json();
+      document.getElementById('searchResults').textContent = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>

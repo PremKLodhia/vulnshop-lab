@@ -1,0 +1,23 @@
+{
+  "name": "vulnshop-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "VulnShop Lab local-only cybersecurity portfolio project",
+  "scripts": {
+    "setup": "npm install --prefix vuln-app && npm install --prefix secure-app",
+    "run": "docker compose up --build",
+    "run:vuln": "npm start --prefix vuln-app",
+    "run:secure": "npm start --prefix secure-app",
+    "seed:vuln": "npm run seed --prefix vuln-app",
+    "seed:secure": "npm run seed --prefix secure-app",
+    "seed-db": "npm run seed:vuln && npm run seed:secure",
+    "reset-db:vuln": "npm run reset-db --prefix vuln-app",
+    "reset-db:secure": "npm run reset-db --prefix secure-app",
+    "reset-db": "npm run reset-db:vuln && npm run reset-db:secure",
+    "demo:reset": "npm run reset-db",
+    "demo:reset:ps": "powershell -ExecutionPolicy Bypass -File scripts/reset-lab.ps1",
+    "demo:reset:sh": "bash scripts/reset-lab.sh",
+    "up": "docker compose up --build",
+    "down": "docker compose down"
+  }
+}

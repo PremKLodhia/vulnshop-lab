@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | VulnShop Lab</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">
+      <a href="/">🛒 VulnShop Lab</a>
+      <span class="version-badge version-badge-secure">SECURE :3001</span>
+    </div>
+    <div class="nav-links">
+      <a href="/products">Products</a>
+      <% if (user) { %>
+        <a href="/cart">Cart</a>
+        <a href="/orders">Orders</a>
+        <a href="/support">Support</a>
+        <a href="/fetch">URL Fetch</a>
+        <% if (user.role === 'admin') { %>
+          <a href="/admin" class="admin-link">Admin</a>
+        <% } %>
+        <a href="/profile">👤 <%= user.username %></a>
+        <a href="/logout" class="btn-logout">Logout</a>
+      <% } else { %>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      <% } %>
+    </div>
+  </nav>
+
+  <div class="warning-banner">
+    REMEDIATED BUILD FOR VERIFICATION AND RETEST - LOCALHOST ONLY
+  </div>
+
+  <main class="container">
+    <%- body %>
+  </main>
+
+  <footer>
+    <p>VulnShop Lab &copy; 2026 - Educational Cybersecurity Project - Secure Version</p>
+  </footer>
+</body>
+</html>

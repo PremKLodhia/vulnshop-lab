@@ -1,0 +1,28 @@
+services:
+  vuln-app:
+    build: ./vuln-app
+    container_name: vulnshop-vuln
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      - PORT=3000
+    volumes:
+      - ./vuln-app/data:/app/data
+      - ./vuln-app/public/uploads:/app/public/uploads
+    command: sh -c "npm run reset-db && npm start"
+
+  secure-app:
+    build: ./secure-app
+    container_name: vulnshop-secure
+    ports:
+      - "127.0.0.1:3001:3001"
+    environment:
+      - PORT=3001
+      - SESSION_SECRET=local_dev_only_change_me_secure_secret_987654321
+      - DB_PATH=./data/vulnshop_secure.db
+      - ALLOWED_FETCH_HOSTS=example.com,httpbin.org
+      - MAX_UPLOAD_BYTES=1048576
+    volumes:
+      - ./secure-app/data:/app/data
+      - ./secure-app/public/uploads:/app/public/uploads
+    command: sh -c "npm run reset-db && npm start"

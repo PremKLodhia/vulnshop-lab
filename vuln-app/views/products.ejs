@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | VulnShop Lab</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand"><a href="/">🛒 VulnShop Lab</a><span class="vuln-badge">⚠️ VULNERABLE</span></div>
+    <div class="nav-links">
+      <a href="/products">Products</a>
+      <% if (user) { %><a href="/cart">Cart</a><a href="/orders">Orders</a><a href="/support">Support</a><a href="/fetch">URL Fetch</a>
+        <% if (user.role === 'admin') { %><a href="/admin" class="admin-link">Admin</a><% } %>
+        <a href="/profile">👤 <%= user.username %></a><a href="/logout" class="btn-logout">Logout</a>
+      <% } else { %><a href="/login">Login</a><a href="/register">Register</a><% } %>
+    </div>
+  </nav>
+  <div class="warning-banner">⚠️ INTENTIONALLY VULNERABLE — LOCAL LAB USE ONLY</div>
+  <main class="container">
+    <h1>Products</h1>
+    <form method="GET" action="/products" class="search-form">
+      <!-- VULNERABILITY: Search term reflected back unescaped (Reflected XSS) -->
+      <!-- Try: ?search=<script>alert('XSS')</script> -->
+      <input type="text" name="search" value="<%= search %>" placeholder="Search products...">
+      <button type="submit" class="btn-primary">Search</button>
+    </form>
+
+    <% if (search) { %>
+      <!-- VULNERABILITY: Reflected XSS - search param echoed without escaping -->
+      <p>Search results for: <%- search %></p>
+    <% } %>
+
+    <div class="product-grid">
+      <% products.forEach(p => { %>
+        <div class="product-card">
+          <img src="<%= p.image %>" alt="<%= p.name %>">
+          <h3><%= p.name %></h3>
+          <p class="category"><%= p.category %></p>
+          <p class="price">$<%= p.price.toFixed(2) %></p>
+          <p class="stock"><%= p.stock > 0 ? `In Stock (${p.stock})` : 'Out of Stock' %></p>
+          <a href="/products/<%= p.id %>" class="btn-secondary">View Details</a>
+          <% if (user) { %>
+            <form method="POST" action="/cart/add" style="display:inline">
+              <input type="hidden" name="productId" value="<%= p.id %>">
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="btn-primary">Add to Cart</button>
+            </form>
+          <% } %>
+        </div>
+      <% }) %>
+    </div>
+    <% if (products.length === 0) { %>
+      <p class="no-results">No products found.</p>
+    <% } %>
+  </main>
+</body>
+</html>

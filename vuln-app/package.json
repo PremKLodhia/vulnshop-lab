@@ -1,0 +1,27 @@
+{
+  "name": "vulnshop-lab-vuln",
+  "version": "1.0.0",
+  "description": "VulnShop Lab - Deliberately Vulnerable Version (Educational Use Only)",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "seed": "node src/db/seed.js",
+    "seed-db": "node src/db/seed.js",
+    "reset-db": "node src/db/reset.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.4.3",
+    "connect-sqlite3": "^0.9.13",
+    "cookie-parser": "^1.4.6",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "multer": "^1.4.5-lts.1",
+    "node-fetch": "^2.7.0",
+    "vulnshop-lab": "file:.."
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
