@@ -101,20 +101,7 @@ Code markers:
 - Vulnerable code uses `// VULNERABILITY:` comments.
 - Secure code uses `// FIX:` comments.
 
-## Walkthrough and Reporting Docs
 
-- Vulnerability walkthrough with localhost PoCs: [docs/walkthrough.md](docs/walkthrough.md)
-- Simple risk matrix: [docs/risk-matrix.md](docs/risk-matrix.md)
-- What interviewers should notice: [docs/interviewer-notes.md](docs/interviewer-notes.md)
-- Threat model: [docs/threat-model.md](docs/threat-model.md)
-- Route map and attack surface: [docs/route-map-attack-surface.md](docs/route-map-attack-surface.md)
-- Architecture: [docs/architecture.md](docs/architecture.md)
-
-## Professional Report Templates
-
-- Pentest report template: [docs/reports/pentest-report-template.md](docs/reports/pentest-report-template.md)
-- Remediation report template: [docs/reports/remediation-report-template.md](docs/reports/remediation-report-template.md)
-- Retest report template: [docs/reports/retest-report-template.md](docs/reports/retest-report-template.md)
 
 ## Useful Scripts
 
@@ -129,12 +116,7 @@ npm run seed-db
 npm run demo:reset
 ```
 
-## What Interviewers Should Notice
 
-- You can demonstrate exploitation and remediation against the same business features.
-- You can explain why each vulnerability happens at code level.
-- You can justify remediation choices using layered controls.
-- You can retest objectively using repeatable steps and seeded accounts.
 
 ## Next Improvement Targets
 
