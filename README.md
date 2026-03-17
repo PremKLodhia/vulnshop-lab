@@ -1,6 +1,6 @@
 # VulnShop Lab
 
-VulnShop Lab is a side-by-side security learning project for internship interviews.
+VulnShop Lab is a side-by-side security learning project.
 
 - `vuln-app` demonstrates intentionally vulnerable implementations.
 - `secure-app` implements matching remediations for each demonstrated issue.
